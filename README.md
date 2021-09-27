@@ -1,6 +1,6 @@
-        --------------------------
-            KNIGHTS MIN MOVE
-        --------------------------
+                                --------------------------
+                                    KNIGHTS MIN MOVE
+                                --------------------------
         
 -Program koji na osnovu unetih polazinh i krajnjih koordinata konja odredjuju minimalan broj koraka
 koji je potreban da stignete od polaznog polja do krajnjeg polja i ispisuje svaki polje preko kog je konj presao (putanju)

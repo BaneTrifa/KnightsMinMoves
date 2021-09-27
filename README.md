@@ -12,3 +12,5 @@ INPUT:
 ![input](https://user-images.githubusercontent.com/88882867/134936169-bfc6ecbd-a9d1-48dc-92c0-9078d491e92d.png)
 
 OUTPUT:
+
+![output](https://user-images.githubusercontent.com/88882867/134938897-79b14917-7516-4728-b8c4-bd9a0a218eb8.png)

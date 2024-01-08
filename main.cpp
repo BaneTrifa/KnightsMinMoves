@@ -1,195 +1,61 @@
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
-class Polje {
-public:
-    int xKoordinata, yKoordinata, distanca; // distanca je distanca od pocetnog polja
-    Polje* prethodno;
-
-    Polje(int x, int y, int dis, Polje* pret) {
-        xKoordinata = x;
-        yKoordinata = y;
-        distanca = dis;
-        prethodno = pret;
-    }
-
-
-};
-
-char tabla[17][18] = { {'8', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|'}, //18x17
-                       {'-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '+', '-', '|'},
-                       {'7', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|'},
-                       {'-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '+', '-', '|'},
-                       {'6', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|'},
-                       {'-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '+', '-', '|'},
-                       {'5', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|'},
-                       {'-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '+', '-', '|'},
-                       {'4', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|'},
-                       {'-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '+', '-', '|'},
-                       {'3', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|'},
-                       {'-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '+', '-', '|'},
-                       {'2', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|'},
-                       {'-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '+', '-', '|'},
-                       {'1', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|', ' ', '|'},
-                       {'-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '-', '+', '-', '+', '-', '+', '-', '|'},
-                       {' ', '|', '1', '|', '2', '|', '3', '|', '4', '|', '5', '|', '6', '|', '7', '|', '8', '|'}   };
-
-
-///METODE///
-void IspisiTablu();
-bool uGraniciTable(int x, int y); // metod koji proveravara da li je polje izlazi iz okvira table, vraca true ako ne izlazi
-Polje* NadjiMinimum(int pocetnaPozicija[2], int krajnjaPozicija[2]); //metoda koja nam vraca adresu krajnjeg polja, distancu od pocetnog polja i sve prethodne poteze
-void OznaciPolje(int x, int y, char oznaka); // sluzi kako bi na odredjeno polje stavili odrdjeni znak
-////////////
+#include "minMoves.h"
 
 int main() {
-    int pocetnaPozicija[2]; // pocetne koordinate konja
-    int krajnjaPozicija[2]; // koordinate polja na koje konj treba da dodje
+    int startPosition[2]; // initial coordinates of the knight
+    int finalPosition[2]; // coordinates of the field where the knight should come
 
-    IspisiTablu();
+    PrintTable();
 
-    cout << "\nUnesite x-koordinatu pocetnog polja konja: "; cin >> pocetnaPozicija[0];
-    cout << "Unesite y-koordinatu pocetnog polja konja: "; cin >> pocetnaPozicija[1];
+    cout << "\nEnter the x-coordinate of the knight's starting field: "; cin >> startPosition[0];
+    cout << "Enter the y-coordinate of the knight's starting field: "; cin >> startPosition[1];
 
-    if( !uGraniciTable(pocetnaPozicija[0],pocetnaPozicija[1]) ) { //Proveravamo da li su unete pocetne koordinate validne
-        cout << "Uneli ste koordinate koje su nevalidne!!!";
+    if( !isInTable(startPosition[0],startPosition[1]) ) { // We check whether the initial coordinates entered are valid
+        cout << "You have entered invalid coordinates!!!";
         exit(0);
     }
 
-    cout << "\nUnesite x-koordinatu krajnjeg polja konja: "; cin >> krajnjaPozicija[0];
-    cout << "Unesite y-koordinatu krajnjeg polja konja: "; cin >> krajnjaPozicija[1];
+    cout << "\nEnter the x-coordinate of the knight's final field: "; cin >> finalPosition[0];
+    cout << "Enter the y-coordinate of the knight's final field:"; cin >> finalPosition[1];
 
-    if( !uGraniciTable(krajnjaPozicija[0],krajnjaPozicija[1]) ) { //Proveravamo da li su unete krajnje koordinate validne
-        cout << "Uneli ste koordinate koje su nevalidne!!!";
+    if( !isInTable(finalPosition[0],finalPosition[1]) ) { // We check whether the final coordinates entered are valid
+        cout << "You have entered invalid coordinates!!!";
         exit(0);
     }
 
 
-    Polje* minimalan = NadjiMinimum(pocetnaPozicija,krajnjaPozicija); //trazimo najkraci put i vracamo adresu krajnjeg(trazenog) polja
+    Field* minimum = FindMinimum(startPosition,finalPosition); // We search for the shortest path and return the address of the last (requested) field
 
     system("cls");
 
-    cout << "Minimalan broj poteza je: " << minimalan->distanca << endl;
+    cout << "The minimum number of moves is: " << minimum->distance << endl;
 
-    vector<Polje*> potezi;
-    while(minimalan->prethodno != NULL) { //Posto svako polje sadrzi adresu prethodnog polja,
-        potezi.push_back(minimalan);      //u vector smestamo polja od poslednjeg(krajnjeg)
-        minimalan = minimalan->prethodno; //ka prvom(pocetnom) odnosno dobijamo u vector-u potezi putanju kretanja konja
+    vector<Field*> moves;
+    while(minimum->previous != NULL) { // Since each Field contains the address of the previous field,
+        moves.push_back(minimum);      // we place the fields from the last (end) into the vector
+        minimum = minimum->previous;   // towards the first (initial) and we get the knight's movement path in the moves vector
     }
 
-    //Ispisujemo celu putanju konja (od pocetnog polja do krajnjeg)
-    cout << "\nPutanja: " << endl;
-    cout << "[" << pocetnaPozicija[0] << "," << pocetnaPozicija[1] << "]" << endl; //Ispisemo koordinate prvog(pocetnog) polja
+    // We print the entire path of the knight (from the starting field to the final one)
+    cout << "\nPath: " << endl;
+    cout << "[" << startPosition[0] << "," << startPosition[1] << "]" << endl; // Print the coordinates of the first (initial) field
 
-    while(!potezi.empty()) { //ispisujemo koordinate svih polja koja se nalaze u vector<Polje*>potezi  pocev od zadnjeg
-        cout << "[" << potezi.back()->xKoordinata << "," << potezi.back()->yKoordinata << "]" << endl; //ispisemo koordinate zadnjeg
-        OznaciPolje(potezi.back()->xKoordinata,potezi.back()->yKoordinata,'X'); //svako polje preko kojeg je konj presao oznacavamo sa 'X'
-        potezi.pop_back();
+    while(!moves.empty()) { // we print the coordinates of all fields that are in vector<Field*>moves starting from the last one
+        cout << "[" << moves.back()->xCoordinate << "," << moves.back()->yCoordinate << "]" << endl; 
+        markField(moves.back()->xCoordinate,moves.back()->yCoordinate,'X'); // we mark each Field over which the knight crossed with an 'X'
+        moves.pop_back();
     }
 
-    potezi.clear();
+    moves.clear();
 
-    OznaciPolje(pocetnaPozicija[0],pocetnaPozicija[1],'P'); // Oznacavamo pocetno polje
-    OznaciPolje(krajnjaPozicija[0],krajnjaPozicija[1],'K'); // Oznacavamo krajnje polje
+    markField(startPosition[0],startPosition[1],'S'); 
+    markField(finalPosition[0],finalPosition[1],'F');
 
     cout << "\n";
-    IspisiTablu();
-    cout << "\nP - pocetna pozicija konja" << endl;
-    cout << "K - krajnja pozicija konja" << endl;
-    cout << "X - polja preko kojih je konj stigao do krajnje pozicije" << endl;
+    PrintTable();
+    cout << "\nS - starting position of the knight" << endl;
+    cout << "F - final position of the knight" << endl;
+    cout << "X - fields over which the knight reached the final position" << endl;
 
     return 0;
 }
 
-Polje* NadjiMinimum(int pocetnaPozicija[2], int krajnjaPozicija[2]) {
-    int xOsa[] = {-2,-1,1,2,-2,-1,1,2};
-    int yOsa[] = {-1,-2,-2,-1,1,2,2,1};
-
-    vector<Polje*> mogucePozicije; //sva polja na koja konj moze da ide
-    mogucePozicije.push_back(new Polje(pocetnaPozicija[0], pocetnaPozicija[1],0,NULL));
-
-    bool posecenaPolja[9][9]; // polja na kojima je konj vec bio
-
-    for(int i=1;i<9;i++) { //inicijalizujemo sva polja kao neposecena
-        for(int j=1;j<9;j++) {
-                posecenaPolja[i][j] = false;
-        }
-    }
-
-    posecenaPolja[pocetnaPozicija[0]][pocetnaPozicija[1]] = true; // startno polje oznacavamo kao poseceno
-
-    Polje* trenutni;
-    int x,y;
-    while(!mogucePozicije.empty()) {
-           trenutni = mogucePozicije.front();
-           mogucePozicije.erase(mogucePozicije.begin());
-
-
-           if(trenutni->xKoordinata == krajnjaPozicija[0] && trenutni->yKoordinata == krajnjaPozicija[1]) { //proveravamo da li smo dosli na ciljano polje
-				return trenutni;
-				mogucePozicije.clear(); //brisemo vektor
-			}
-
-            for(int i=0;i<8;i++) {
-                x = trenutni->xKoordinata + xOsa[i];
-                y = trenutni->yKoordinata + yOsa[i];
-
-                if(uGraniciTable(x,y) && !posecenaPolja[x][y] ) {
-                    posecenaPolja[x][y] = true;
-                    mogucePozicije.push_back(new Polje(x,y,trenutni->distanca+1,trenutni));
-                }
-            }
-
-    }
-
-    return NULL;
-}
-
-void IspisiTablu() {
-    for(int i=0;i<17;i++) {
-        for(int j=0;j<18;j++) {
-            cout << tabla[i][j];
-        }
-        cout << "\n";
-    }
-}
-
-bool uGraniciTable(int x, int y) {
-    if(x<=8 && x>0 && y<=8 && y>0) return true;
-
-    return false;
-}
-
-void OznaciPolje(int x, int y, char oznaka) {
-
-    switch(y) {
-        case 1:
-            y = 14;
-            break;
-        case 2:
-            y = 12;
-            break;
-        case 3:
-            y = 10;
-            break;
-        case 4:
-            y = 8;
-            break;
-        case 5:
-            y = 6;
-            break;
-        case 6:
-            y = 4;
-            break;
-        case 7:
-            y = 2;
-            break;
-        case 8:
-            y = 0;
-            break;
-    }
-
-    tabla[y][x*2] = oznaka;
-}

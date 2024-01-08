@@ -1,16 +1,37 @@
-                                --------------------------
-                                    KNIGHTS MIN MOVE
-                                --------------------------
-        
--Program koji na osnovu unetih polazinh i krajnjih koordinata konja odredjuju minimalan broj koraka
-koji je potreban da stignete od polaznog polja do krajnjeg polja i ispisuje svaki polje preko kog je konj presao (putanju)
+# KNIGHTS MIN MOVES
 
--Validne koordinate za unos su x<=8, x>0, y<=8, y>0. Ako unesete nevalidne koordinate program prestaje sa radom
+## Description 
 
-INPUT:
+A program that, based on the entered starting and ending coordinates of the horse, determines the minimum number of steps needed to get from the starting field to the ending field and prints each field over which the horse crossed (the path).
 
-![input](https://user-images.githubusercontent.com/88882867/134936169-bfc6ecbd-a9d1-48dc-92c0-9078d491e92d.png)
+## Running
+
+To run the program, follow these commands:
+
+  1. Open the terminal in the where src files are.
+  2. Run command: g++ main.cpp minMoves.cpp minMoves.h -o main
+  3. Run: main.exe
+
+## Demonstration of functionalities
+
+INPUT (valid):
+
+<p align="center">
+  <img width="642" alt="12" src="https://github.com/BaneTrifa/KnightsMinMoves/assets/88882867/a80254cb-bd7b-4b3a-a7e8-99aeed47cef0">
+</p>
 
 OUTPUT:
 
-![output](https://user-images.githubusercontent.com/88882867/134938897-79b14917-7516-4728-b8c4-bd9a0a218eb8.png)
+<p align="center">
+<img width="758" alt="13" src="https://github.com/BaneTrifa/KnightsMinMoves/assets/88882867/934e3e26-3ee7-4be7-bfc3-55f16136b3c4">
+</p>
+
+
+INPUT (invalid):
+<p align="center">
+<img width="518" alt="14" src="https://github.com/BaneTrifa/KnightsMinMoves/assets/88882867/36f11bc4-7907-4bae-ac81-6fcf8b147253">
+</p>
+
+## Author
+
+- [@BrankoTrifkovic](https://www.linkedin.com/in/branko-trifkovic/)

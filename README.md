@@ -2,7 +2,7 @@
 
 ## Description 
 
-A program that, based on the entered starting and ending coordinates of the horse, determines the minimum number of steps needed to get from the starting field to the ending field and prints each field over which the horse crossed (the path).
+A program that, based on the entered starting and ending coordinates of the horse, determines the minimum number of steps needed to get from the starting field to the ending field and prints each field over which the knight crossed (the path).
 
 ## Running
 
